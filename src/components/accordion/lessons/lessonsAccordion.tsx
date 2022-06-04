@@ -1,8 +1,39 @@
 import { observer } from "mobx-react"
 import SimpleMorseImage from "../../image/simpleMorseImage"
 import { IMorseStoreProps } from "../../IMorseStoreProps"
+import LessonRadioTarget from "./lessonRadioTarget"
+import {runInAction} from "mobx"
+import LessonButtonTarget from "./lessonButtonTarget"
 
 const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
+
+    const onUserTargetClick = (userType:any) => {
+        runInAction(()=>{
+            console.log(`${userType} was clicked`)
+            morseStore.lessons.userTarget=userType
+        })
+    }
+
+    const onClassTargetClick = (classType:any) => {
+        runInAction(()=>{
+            console.log(`${classType} was clicked`)
+            morseStore.lessons.selectedClass=classType
+        })
+    }
+
+    const onLetterGroupTargetClick = (letterGroupType:any) => {
+        runInAction(()=>{
+            console.log(`${letterGroupType} was clicked`)
+            morseStore.lessons.letterGroup = letterGroupType
+        })
+    }
+
+    const onDisplayTargetClick = (displayType:any) => {
+        runInAction(()=>{
+            console.log(`${displayType} was clicked`)
+            morseStore.lessons.setDisplaySelected(displayType)
+        })
+    }
     return(
 <div className="accordion-item">
     <h2 className="accordion-header" id="headingMockuplessons">
@@ -35,23 +66,21 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                 
                 <div className="col-auto">
                     <div className="btn-group-vertical" role="group"
-                        aria-label="Basic radio toggle button group"
-                        data-bind="foreach: lessons.userTargets, childrenComplete: () => lessons.setUserTargetInitialized()">
-                        <input type="radio" className="btn-check" name="btnradioUserTargets"
-                            data-bind="checkedValue: $data, checked: $root.lessons.userTarget"/>
-                        <label id="btnUserTypeSelection" className="btn btn-outline-primary"
-                            data-bind="text: $data, click: $root.lessons.changeUserTarget($data)"></label>
+                        aria-label="Basic radio toggle button group">
+                        {morseStore.lessons.userTargets.map((ut) => 
+                        <LessonRadioTarget display={ut} key={ut} checkedDisplay={morseStore.lessons.userTarget} 
+                         inputName="btnradioUserTargets" labelName="btnUserTypeSelection" onRadioClick={onUserTargetClick} />
+                        )}                        
                     </div>
                 </div>
                 
                 <div className="col-auto">
                     <div className="btn-group-vertical" role="group"
-                        aria-label="Basic radio toggle button group"
-                        data-bind="foreach: lessons.classes, childrenComplete: () => lessons.setSelectedClassInitialized()">
-                        <input type="radio" className="btn-check" name="btnradioClasses"
-                            data-bind="checkedValue: $data, checked: $root.lessons.selectedClass"/>
-                        <label id="btnClassSelection" className="btn btn-outline-primary"
-                            data-bind="text: $data, click: $root.lessons.changeSelectedClass($data)"></label>
+                        aria-label="Basic radio toggle button group">
+                        {morseStore.lessons.classes.map((ut) => 
+                        <LessonRadioTarget display={ut} key={ut} checkedDisplay={morseStore.lessons.userTarget} 
+                         inputName="btnradioClasses" labelName="btnClassSelection" onRadioClick={onClassTargetClick} />
+                        )}                        
                     </div>
                 </div>
                 
@@ -59,9 +88,10 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                     <div className="list-group"
                         data-bind="foreach: lessons.letterGroups, childrenComplete: () => lessons.setLetterGroupInitialized()"
                         style={{overflowY:"auto", height:"250px", width:"200px"}}>
-                        <button id="btnLetterGroupSelection" type="button"
-                            className="list-group-item list-group-item-action"
-                            data-bind="text: $data, click: $root.lessons.setLetterGroup($data), css: { active: $data==$parent.lessons.letterGroup()}"></button>
+                        {morseStore.lessons.letterGroups.map((ut) => 
+                        <LessonButtonTarget display={ut} key={ut} checkedDisplay={morseStore.lessons.letterGroup} 
+                         inputName="btnLetterGroupSelection" onClick={()=>onLetterGroupTargetClick(ut)} />
+                        )}   
                     </div>
                 </div>
                 
@@ -69,9 +99,10 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                     <div className="list-group"
                         data-bind="foreach: lessons.displays, childrenComplete: () => lessons.setDisplaysInitialized()"
                         style={{overflowY:"auto", height:"250px", width: "200px"}}>
-                        <button id="btnLessonSelection" type="button"
-                            className="list-group-item list-group-item-action"
-                            data-bind="text: $data.display, click: ()=>$root.lessons.setDisplaySelected($data), css: { active: $data.display==$parent.lessons.selectedDisplay().display}"></button>
+                        {morseStore.lessons.displays.map((ut) => 
+                        <LessonButtonTarget display={ut.display} key={ut.display} checkedDisplay={morseStore.lessons.selectedDisplay.display} 
+                         inputName="btnLessonSelection" onClick={()=>onDisplayTargetClick(ut)} />
+                        )}  
                     </div>
                 </div>
 

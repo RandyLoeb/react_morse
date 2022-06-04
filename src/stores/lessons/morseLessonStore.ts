@@ -1,16 +1,17 @@
 import IFileOptionsInfo from "./fileOptionsInfo"
 import { MorseLessonFileFinder } from "../morseLessonFileFinder"
 import WordListsJson from '../../wordfilesconfigs/wordlists.json'
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, runInAction } from "mobx"
+
 
 export class MorseLessonStore {
     autoCloseLessonAccordion:boolean
     userTarget:string
     selectedClass:string
-    userTargetInitialized:boolean
-    selectedClassInitialized:boolean
-    letterGroupInitialized:boolean
-    displaysInitialized:boolean
+    // userTargetInitialized:boolean
+    // selectedClassInitialized:boolean
+    // letterGroupInitialized:boolean
+    // displaysInitialized:boolean
     letterGroup:string
     selectedDisplay:any
     wordLists:IFileOptionsInfo[]
@@ -56,8 +57,8 @@ export class MorseLessonStore {
     }
   
     get letterGroups () {
-        this.letterGroupInitialized = false
-        this.letterGroup = ''
+        // this.letterGroupInitialized = false
+        runInAction(()=>{ this.letterGroup = ''})
         const lgs:string[] = []
         if (this.selectedClass === '' || this.userTarget === '') {
           const missing = []
@@ -79,8 +80,8 @@ export class MorseLessonStore {
     }
   
     get displays ()  {
-        this.displaysInitialized = false
-        this.selectedDisplay({})
+        // this.displaysInitialized = false
+        runInAction(()=>this.selectedDisplay={})
         const dps:IFileOptionsInfo[] = []
         if (this.selectedClass === '' || this.userTarget === '' || this.letterGroup === '') {
           return [{ display: 'Select wordlist', fileName: 'dummy.txt', isDummy: true }]
@@ -104,10 +105,10 @@ export class MorseLessonStore {
       this.autoCloseLessonAccordion = false// ko.observable(false).extend({ saveCookie: this.autoCloseCookieName } as ko.ObservableExtenderOptions<boolean>)
       this.userTarget = ''
       this.selectedClass = ''
-      this.userTargetInitialized = false
-      this.selectedClassInitialized = false
-      this.letterGroupInitialized = false
-      this.displaysInitialized = false
+      // this.userTargetInitialized = false
+      // this.selectedClassInitialized = false
+      // this.letterGroupInitialized = false
+      // this.displaysInitialized = false
       this.letterGroup = ''
       this.selectedDisplay = {}
       this.wordLists = []
@@ -154,7 +155,7 @@ export class MorseLessonStore {
         owner: this
       }) */
   
-      
+      this.initializeWordList()
     }
   
     // end constructor
@@ -238,7 +239,7 @@ export class MorseLessonStore {
       MorseLessonFileFinder.getMorseLessonFile(filename, afterFound)
     }
   
-    setUserTargetInitialized = () => {
+    /* setUserTargetInitialized = () => {
       this.userTargetInitialized = true
     }
   
@@ -253,7 +254,7 @@ export class MorseLessonStore {
   
     setDisplaysInitialized = () => {
       this.displaysInitialized = true
-    }
+    } */
   
     /* changeUserTarget = (userTarget:string) => {
       if (this.userTargetInitialized) {
@@ -284,13 +285,13 @@ export class MorseLessonStore {
   
     setDisplaySelected = (display:any) => {
       if (!display.isDummy) {
-        if (this.displaysInitialized) {
-          this.selectedDisplay(display)
+        // if (this.displaysInitialized) {
+          this.selectedDisplay = display
           //this.morseSettings.misc.newlineChunking(display.newlineChunking)
           // setText(`when we have lesson files, load ${selectedDisplay().fileName}`)
-          this.getWordList(this.selectedDisplay().fileName)
+          this.getWordList(this.selectedDisplay.fileName)
           //this.closeLessonAccordianIfAutoClosing()
-        }
+        // }
       }
     }
   
