@@ -223,10 +223,11 @@ export class MorseLessonStore {
   
     getWordList = (filename:string) => {
       const isText = filename.endsWith('txt')
-  
+      console.log(`isText:${isText}`)
       const afterFound = (result:any) => {
         if (result.found) {
           if (isText) {
+            console.log(result)
             this.setText(result.data)
           } else {
             this.randomWordList(result.data, false)

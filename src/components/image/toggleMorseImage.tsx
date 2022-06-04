@@ -2,9 +2,9 @@
 import { observer } from "mobx-react-lite";
 import { IMorseStoreProps } from "../IMorseStoreProps";
 
-interface IToggleMorseImageProps extends IMorseStoreProps{
-    height:number
-    width:number
+export interface IToggleMorseImageProps extends IMorseStoreProps{
+    height?:number
+    width?:number
     toggle:boolean
     truePic:string
     falsePic:string

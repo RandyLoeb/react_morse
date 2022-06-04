@@ -32,6 +32,7 @@ export class MorseStore {
     riseMsOffset:number=1.5
     decayMsOffset:number=1.5
     morseWordPlayer:MorseWordPlayer
+    newLineChunking:boolean
 
 
 
@@ -58,6 +59,7 @@ export class MorseStore {
         this.rawText = 'CQ LICW'
         this.showRaw = true
         this.flaggedWords = ''
+        this.newLineChunking = false
     }
 
     getMorseStringToWavBufferConfig = (text) => {

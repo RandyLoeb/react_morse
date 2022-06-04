@@ -4,6 +4,9 @@ import { IMorseStoreProps } from "../../IMorseStoreProps"
 import LessonRadioTarget from "./lessonRadioTarget"
 import {runInAction} from "mobx"
 import LessonButtonTarget from "./lessonButtonTarget"
+import LessonsBadge from "./lessonsBadge"
+import LessonToggleButton from "./lessonToggleButton"
+import ToggleMorseImage from "../../image/toggleMorseImage"
 
 const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
 
@@ -34,6 +37,9 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
             morseStore.lessons.setDisplaySelected(displayType)
         })
     }
+
+    
+
     return(
 <div className="accordion-item">
     <h2 className="accordion-header" id="headingMockuplessons">
@@ -44,17 +50,7 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
             <SimpleMorseImage pic='bookImage' height={20} width={20} morseStore={morseStore} />
             <span>&nbsp;</span><span>LICW Lessons</span>
             <span>&nbsp;</span>
-            <span className="badge bg-success" data-bind="if: lessons.selectedDisplay().display">
-                <span>Type: </span><span data-bind="text: lessons.userTarget"></span>
-                <span>&nbsp; Class: </span><span data-bind="text: lessons.selectedClass"></span>
-                <span>&nbsp; Letter Group: </span><span
-                    data-bind="text: lessons.letterGroup"></span>
-                <span>&nbsp; Lesson: </span><span
-                    data-bind="text: lessons.selectedDisplay().display"></span>
-            </span>
-            <span className="badge bg-success" data-bind="if: !lessons.selectedDisplay().display">(None
-                Currently
-                Selected)</span>
+            <LessonsBadge morseStore={morseStore}/>
         </button>
     </h2>
 
@@ -110,28 +106,21 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                 <div className="col-auto">
                     <div className="btn-group-vertical" role="group"
                         aria-label="Basic checkbox toggle button group">
+                        <LessonToggleButton btnColoring="btn-outline-primary" label="Randomize" isChecked={morseStore.lessons.randomizeLessons}
+                                            onChange={()=>{runInAction(()=>morseStore.lessons.randomizeLessons = !morseStore.lessons.randomizeLessons)}} 
+                                            id="btncheck1" toggle={morseStore.lessons.randomizeLessons}  morseStore={morseStore}/>
+
+                        <LessonToggleButton btnColoring="btn-outline-primary" label="Auto Close" isChecked={morseStore.lessons.autoCloseLessonAccordion}
+                                            onChange={()=>{runInAction(()=>morseStore.lessons.autoCloseLessonAccordion = !morseStore.lessons.autoCloseLessonAccordion)}} 
+                                            id="btncheckautoclose" toggle={morseStore.lessons.autoCloseLessonAccordion}  morseStore={morseStore}/>
                         
-                        <input type="checkbox" className="btn-check" autoComplete="off" id="btncheck1"
-                            data-bind="checked: lessons.randomizeLessons"/>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck1">Randomize&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: lessons.randomizeLessons() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></label>
-                        
-                        <input type="checkbox" className="btn-check" autoComplete="off"
-                            id="btncheckautoclose"
-                            data-bind="checked: lessons.autoCloseLessonAccordion"/>
-                        <label className="btn btn-outline-primary" htmlFor="btncheckautoclose">Auto
-                            Close&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: lessons.autoCloseLessonAccordion() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></label>
-                    
-                        <input type="checkbox" className="btn-check" id="btncheck2stickysetstoggle"
-                            autoComplete="off" data-bind="checked: lessons.ifStickySets"/>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck2stickysetstoggle"
-                            style={{width: "125px"}}>Sticky
-                            Sets&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: lessons.ifStickySets() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></label>
+                        <LessonToggleButton btnColoring="btn-outline-primary" label="Sticky Sets" isChecked={morseStore.lessons.ifStickySets} style={{width: "125px"}}
+                                            onChange={()=>{runInAction(()=>morseStore.lessons.ifStickySets = !morseStore.lessons.ifStickySets)}} 
+                                            id="btncheck2stickysetstoggle" toggle={morseStore.lessons.ifStickySets}  morseStore={morseStore}/>
                         
                         <input type="text" className="form-control" style={{maxWidth:"125px"}}
                             aria-label="Username" min="0"
+                            disabled={!morseStore.lessons.ifStickySets}
                             data-bind="textInput: lessons.stickySets, enable: lessons.ifStickySets"/>
                     </div>
 
@@ -140,55 +129,49 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                             aria-label="Basic checkbox toggle button group">
                             
                             <button type="button" className="btn btn-success"
-                                data-bind="click: lessons.doCustomGroup"
+                                disabled={!morseStore.lessons.customGroup}
+                                onClick={()=>runInAction(()=>morseStore.lessons.doCustomGroup())}
                                 style={{maxWidth:"125px", paddingLeft: "2px", paddingRight: "2px"}} 
-                            >Custom
-                                Group
-                            </button>
+                            >Custom Group</button>
                             
                             <input type="text" className="form-control" style={{maxWidth:"125px"}}
                                 aria-label="Username" min="0"
-                                data-bind="textInput: lessons.customGroup"/>
+                                value={morseStore.lessons.customGroup}
+                                onChange={(e)=>runInAction(()=>morseStore.lessons.customGroup = e.target.value)}
+                            />
                         </div>
                     </div>
                     
-                    <input type="checkbox" className="btn-check" autoComplete="off"
-                        id="btnchecknewlinechunking"
-                        data-bind="checked: settings.misc.newlineChunking"/>
-                    <label className="btn btn-outline-primary" htmlFor="btnchecknewlinechunking"
-                        style={{width: "125px", maxWidth:"125px"}}><span>Keep
-                            Lines&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: settings.misc.newlineChunking() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></span></label>
-
+                    <LessonToggleButton btnColoring="btn-outline-primary" label="Keep Lines" isChecked={morseStore.newLineChunking} style={{width: "125px", maxWidth:"125px"}}
+                                            onChange={()=>{runInAction(()=>morseStore.newLineChunking = !morseStore.newLineChunking)}} 
+                                            id="btncheck2newlinechunking" toggle={morseStore.newLineChunking}  morseStore={morseStore}/>
                 </div>
 
                 
                 <div className="col-auto">
                 
-                    <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off"
-                        data-bind="checked: lessons.ifOverrideTime"/>
-                    <label className="btn btn-outline-primary" htmlFor="btncheck2">Override
-                        Time&nbsp;<img alt="abc"
-                            data-bind="attr:{ src: lessons.ifOverrideTime() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></label>
+                <LessonToggleButton btnColoring="btn-outline-primary" label="Override Time" isChecked={morseStore.lessons.ifOverrideTime}
+                                            onChange={()=>{runInAction(()=>morseStore.lessons.ifOverrideTime = !morseStore.lessons.ifOverrideTime)}} 
+                                            id="btncheck2" toggle={morseStore.lessons.ifOverrideTime}  morseStore={morseStore}/>
 
                     <div className="input-group">
                         
                         <span style={{width: "76px"}} className="input-group-text">Mins</span>
                         <input type="number" className="form-control" style={{maxWidth:"70px"}}
                             aria-label="Username" min="0"
+                            disabled={!morseStore.lessons.ifOverrideTime}
+                            value = {morseStore.lessons.overrideMins}
+                            onChange = {(e)=>runInAction(()=>{ morseStore.lessons.overrideMins = parseInt(e.target.value) })}
                             data-bind="textInput: lessons.overrideMins, enable: lessons.ifOverrideTime"/>
                     </div>
 
                     <div className="btn-group" role="group"
                         aria-label="Basic checkbox toggle button group">
                         
-                        <input type="checkbox" className="btn-check" id="btncheck2overridesize"
-                            autoComplete="off" data-bind="checked: lessons.ifOverrideMinMax"/>
-                        <label style={{width: "146px"}} className="btn btn-outline-primary"
-                            htmlFor="btncheck2overridesize">Override
-                            Size&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: lessons.ifOverrideMinMax() ? morseLoadImages().getSrc('checkImage') : morseLoadImages().getSrc('circleImage')}" /></label>
-
+                        <LessonToggleButton btnColoring="btn-outline-primary" label="Override Size" isChecked={morseStore.lessons.ifOverrideMinMax} style={{width: "146px"}}
+                                            onChange={()=>{runInAction(()=>morseStore.lessons.ifOverrideMinMax = !morseStore.lessons.ifOverrideMinMax)}} 
+                                            id="btncheck2overridesize" toggle={morseStore.lessons.ifOverrideMinMax}  morseStore={morseStore}/>
+                        
                     </div>
 
                     <div className="input-group">
@@ -196,6 +179,15 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                         <span style={{width: "76px"}} className="input-group-text">Min</span>
                         <input style={{width: "70px"}} type="number" className="form-control"
                             aria-label="Username" min="1"
+                            disabled={!morseStore.lessons.ifOverrideMinMax}
+                            value={morseStore.lessons.overrideMin}
+                            onChange={(e)=>{runInAction(()=>{
+                                morseStore.lessons.overrideMin = parseInt(e.target.value)
+                                
+                                if (morseStore.lessons.syncSize) {
+                                    morseStore.lessons.overrideMax = morseStore.lessons.overrideMin
+                                }
+                            } )}}
                             data-bind="textInput: lessons.overrideMin, enable: lessons.ifOverrideMinMax"/>
 
                     </div>
@@ -203,17 +195,24 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                     <div className="input-group">
                     
                         <span className="input-group-text"
-                            data-bind="click: ()=>lessons.syncSize(!lessons.syncSize())">Max&nbsp;<img alt="abc"
-                                data-bind="attr:{ src: lessons.syncSize() ? morseLoadImages().getSrc('lockImage') : morseLoadImages().getSrc('unlockImage')}" /></span>
+                            onClick={(e)=>{runInAction(()=>{morseStore.lessons.syncSize = !morseStore.lessons.syncSize})}}
+                            >Max&nbsp;
+                            <ToggleMorseImage truePic="lockImage" falsePic="unlockImage" toggle={morseStore.lessons.syncSize} morseStore={morseStore} />
+                        </span>
                         <input type="number" className="form-control" style={{maxWidth:"70px"}}
-                            aria-label="Username" min="1"
-                            data-bind="textInput: lessons.overrideMax, enable: lessons.ifOverrideMinMax() && !lessons.syncSize(), attr: { min: lessons.trueOverrideMin}"/>
+                            aria-label="Username" 
+                            disabled={!(morseStore.lessons.ifOverrideMinMax && !morseStore.lessons.syncSize)}
+                            min = {morseStore.lessons.overrideMin}
+                            value = {morseStore.lessons.overrideMax}
+                            onChange = {(e)=>runInAction(()=>morseStore.lessons.overrideMax = parseInt(e.target.value))}
+                        />
                     </div>
                     
                     <button type="button" className="btn btn-success"
-                        data-bind="click: ()=> lessons.setDisplaySelected(lessons.selectedDisplay()), enable: lessons.selectedDisplay().display && !lessons.selectedDisplay().isDummy"
-                        style={{width: "146px", paddingLeft:"2px", paddingRight: "2px"}}>Regenerate
-                        Drill</button>
+                        disabled={!(morseStore.lessons.selectedDisplay.display && !morseStore.lessons.selectedDisplay.isDummy)}
+                        onClick={()=>runInAction(()=>morseStore.lessons.setDisplaySelected(morseStore.lessons.selectedDisplay))}
+                        style={{width: "146px", paddingLeft:"2px", paddingRight: "2px"}}>Regenerate Drill
+                    </button>
                 </div>
             </div>
 
