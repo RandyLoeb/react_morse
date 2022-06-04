@@ -1,15 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+// import './index.css';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { TitleHeader } from './components/titleHeader';
+import { MorseStore } from './stores/morseStore';
+import SettingsArea from './components/settingsArea/settingsArea';
+import WorkingTextArea from './components/workingTextArea/workingTextArea';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const morseStore:MorseStore = new MorseStore()
 root.render(
   <React.StrictMode>
-    <App />
+    <TitleHeader morseStore={morseStore}/>
+    <SettingsArea morseStore={morseStore}/>
+    <WorkingTextArea morseStore={morseStore}/>
   </React.StrictMode>
 );
 
