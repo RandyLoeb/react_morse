@@ -4,6 +4,7 @@ import { MorseWordPlayer } from "../player/morseWordPlayer"
 import { NoiseConfig } from "../player/soundmakers/NoiseConfig"
 import { SoundMakerConfig } from "../player/soundmakers/SoundMakerConfig"
 import MorseStringUtils from "../utils/morseStringUtils"
+import { MorseVoice } from "../voice/MorseVoice"
 import { MorseLessonStore } from "./lessons/morseLessonStore"
 import { MorseLoadImages } from "./morseLoadImages"
 export class MorseStore {
@@ -16,6 +17,7 @@ export class MorseStore {
     dahFrequency:number =450 
     volume:number
     syncWpm:boolean
+    syncFreq:boolean = true
     rawText:string
     showRaw:boolean
     flaggedWords:string
@@ -33,8 +35,26 @@ export class MorseStore {
     decayMsOffset:number=1.5
     morseWordPlayer:MorseWordPlayer
     newLineChunking:boolean
+    cardFontPx:number = 20
+    trailPreDelay:number = 0
+    trailPostDelay:number = 0
+    trailFinal:number = 1
+    trailReveal:boolean = false
 
+    voiceEnabled:boolean=true
+    voiceCapable:boolean=true
+    voiceThinkingTime:number=0
+    voiceVoice:any
+    voiceVolume:number=10
+    voiceRate:number=1
+    voicePitch:number=1
 
+    cardsVisible:boolean = true
+    showExpertSettings:boolean = false
+    rssEnabled:boolean = false
+    smoothing:boolean = true
+
+    voice:MorseVoice
 
     get flaggedWordsCount ():number {
         if (!this.flaggedWords.trim()) {
@@ -60,6 +80,7 @@ export class MorseStore {
         this.showRaw = true
         this.flaggedWords = ''
         this.newLineChunking = false
+        this.voice = new MorseVoice()
     }
 
     getMorseStringToWavBufferConfig = (text) => {

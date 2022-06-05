@@ -14,6 +14,7 @@ import FlaggedWordsAccordion from './components/accordion/flaggedWords/flaggedWo
 // they are used by the accordian.
 import 'bootstrap'
 import LessonsAccordion from './components/accordion/lessons/lessonsAccordion';
+import MorseSettingsAccordion from './components/accordion/moreSettings/moreSettingsAccordion';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -27,6 +28,7 @@ root.render(
     <WorkingTextArea morseStore={morseStore}/>
     <AccordionArea>
       <LessonsAccordion morseStore={morseStore}/>
+      <MorseSettingsAccordion morseStore={morseStore}/>
       <FlaggedWordsAccordion morseStore={morseStore}/>
       
     </AccordionArea>

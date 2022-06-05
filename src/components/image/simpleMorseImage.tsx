@@ -3,8 +3,8 @@ import { observer } from "mobx-react-lite";
 import { IMorseStoreProps } from "../IMorseStoreProps";
 
 export interface ISimpleMorseImageProps extends IMorseStoreProps{
-    height:number
-    width:number
+    height?:number
+    width?:number
     pic:string
     
 }

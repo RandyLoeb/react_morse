@@ -5,7 +5,7 @@ import LessonRadioTarget from "./lessonRadioTarget"
 import {runInAction} from "mobx"
 import LessonButtonTarget from "./lessonButtonTarget"
 import LessonsBadge from "./lessonsBadge"
-import LessonToggleButton from "./lessonToggleButton"
+import MorseToggleButton from "./morseToggleButton"
 import ToggleMorseImage from "../../image/toggleMorseImage"
 
 const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
@@ -106,15 +106,15 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                 <div className="col-auto">
                     <div className="btn-group-vertical" role="group"
                         aria-label="Basic checkbox toggle button group">
-                        <LessonToggleButton btnColoring="btn-outline-primary" label="Randomize" isChecked={morseStore.lessons.randomizeLessons}
+                        <MorseToggleButton btnColoring="btn-outline-primary" label="Randomize" isChecked={morseStore.lessons.randomizeLessons}
                                             onChange={()=>{runInAction(()=>morseStore.lessons.randomizeLessons = !morseStore.lessons.randomizeLessons)}} 
                                             id="btncheck1" toggle={morseStore.lessons.randomizeLessons}  morseStore={morseStore}/>
 
-                        <LessonToggleButton btnColoring="btn-outline-primary" label="Auto Close" isChecked={morseStore.lessons.autoCloseLessonAccordion}
+                        <MorseToggleButton btnColoring="btn-outline-primary" label="Auto Close" isChecked={morseStore.lessons.autoCloseLessonAccordion}
                                             onChange={()=>{runInAction(()=>morseStore.lessons.autoCloseLessonAccordion = !morseStore.lessons.autoCloseLessonAccordion)}} 
                                             id="btncheckautoclose" toggle={morseStore.lessons.autoCloseLessonAccordion}  morseStore={morseStore}/>
                         
-                        <LessonToggleButton btnColoring="btn-outline-primary" label="Sticky Sets" isChecked={morseStore.lessons.ifStickySets} style={{width: "125px"}}
+                        <MorseToggleButton btnColoring="btn-outline-primary" label="Sticky Sets" isChecked={morseStore.lessons.ifStickySets} style={{width: "125px"}}
                                             onChange={()=>{runInAction(()=>morseStore.lessons.ifStickySets = !morseStore.lessons.ifStickySets)}} 
                                             id="btncheck2stickysetstoggle" toggle={morseStore.lessons.ifStickySets}  morseStore={morseStore}/>
                         
@@ -142,7 +142,7 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                         </div>
                     </div>
                     
-                    <LessonToggleButton btnColoring="btn-outline-primary" label="Keep Lines" isChecked={morseStore.newLineChunking} style={{width: "125px", maxWidth:"125px"}}
+                    <MorseToggleButton btnColoring="btn-outline-primary" label="Keep Lines" isChecked={morseStore.newLineChunking} style={{width: "125px", maxWidth:"125px"}}
                                             onChange={()=>{runInAction(()=>morseStore.newLineChunking = !morseStore.newLineChunking)}} 
                                             id="btncheck2newlinechunking" toggle={morseStore.newLineChunking}  morseStore={morseStore}/>
                 </div>
@@ -150,7 +150,7 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                 
                 <div className="col-auto">
                 
-                <LessonToggleButton btnColoring="btn-outline-primary" label="Override Time" isChecked={morseStore.lessons.ifOverrideTime}
+                <MorseToggleButton btnColoring="btn-outline-primary" label="Override Time" isChecked={morseStore.lessons.ifOverrideTime}
                                             onChange={()=>{runInAction(()=>morseStore.lessons.ifOverrideTime = !morseStore.lessons.ifOverrideTime)}} 
                                             id="btncheck2" toggle={morseStore.lessons.ifOverrideTime}  morseStore={morseStore}/>
 
@@ -168,7 +168,7 @@ const LessonsAccordion = observer(({morseStore}:IMorseStoreProps) => {
                     <div className="btn-group" role="group"
                         aria-label="Basic checkbox toggle button group">
                         
-                        <LessonToggleButton btnColoring="btn-outline-primary" label="Override Size" isChecked={morseStore.lessons.ifOverrideMinMax} style={{width: "146px"}}
+                        <MorseToggleButton btnColoring="btn-outline-primary" label="Override Size" isChecked={morseStore.lessons.ifOverrideMinMax} style={{width: "146px"}}
                                             onChange={()=>{runInAction(()=>morseStore.lessons.ifOverrideMinMax = !morseStore.lessons.ifOverrideMinMax)}} 
                                             id="btncheck2overridesize" toggle={morseStore.lessons.ifOverrideMinMax}  morseStore={morseStore}/>
                         
